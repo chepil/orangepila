@@ -31,7 +31,7 @@ services:
     build:
       context: ./serialreader
     container_name: serial
-    restart: unless-stopped
+    restart: always
     networks:
       network:
         aliases:
