@@ -30,15 +30,15 @@ ser = serial.Serial(port=PORT,
                     timeout=1)
 
 def on_disconnect(client, userdata, rc):
-    print("Disconnected with result code: %s", rc)
+    #print("Disconnected with result code: %s", rc)
     reconnect_count, reconnect_delay = 0, FIRST_RECONNECT_DELAY
     while reconnect_count < MAX_RECONNECT_COUNT:
-        print("Reconnecting in %d seconds...", reconnect_delay)
+        #print("Reconnecting in %d seconds...", reconnect_delay)
         time.sleep(reconnect_delay)
 
         try:
             client.reconnect()
-            print("Reconnected successfully!")
+            #print("Reconnected successfully!")
             return
         except Exception as err:
             print("%s. Reconnect failed. Retrying...", err)
