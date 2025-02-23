@@ -42,7 +42,8 @@ services:
       test: [ "CMD-SHELL", "ls /dev/ttyACM0 |wc -l" ]
       interval: 10s
       timeout: 5s
-      retries: 5
+      retries: 500
+      start_period: 10s
 
 volumes:
   data:
