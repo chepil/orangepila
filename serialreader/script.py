@@ -22,7 +22,7 @@ try:
         # Convert the binary string to a normal string
         # Remove the trailing newline character
         message = ser.readline().decode().rstrip()
-
-        print(f'recv {message}')
+        if len(message) > 0:
+            print(f'{message}')
 finally:
     ser.close()
