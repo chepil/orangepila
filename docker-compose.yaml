@@ -5,10 +5,10 @@ services:
     restart: unless-stopped
     volumes:
       - type: bind
-        source: ./config/
+        source: ./mosquitto/config/
         target: /mosquitto/config/
       - type: bind
-        source: ./log/
+        source: ./mosquitto/log/
         target: /mosquitto/log/
       - type: volume
         source: data
@@ -26,6 +26,18 @@ services:
       network:
         aliases:
           - backend
+
+  serial:
+    build:
+      context: ./serialreader
+    container_name: serial
+    restart: unless-stopped
+    networks:
+      network:
+        aliases:
+          - backend
+    devices:
+      - /dev/ttyACM0:/dev/ttyACM0
 
 volumes:
   data:

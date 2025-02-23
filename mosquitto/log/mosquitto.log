@@ -41,3 +41,10 @@
 1740247388: New connection from 172.18.0.1:39833 on port 1883.
 1740247388: New client connected from 172.18.0.1:39833 as mqtt-explorer-fae08d43 (p2, c1, k60).
 1740247400: Client mqtt-explorer-fae08d43 disconnected.
+1740337024: mosquitto version 2.0.20 starting
+1740337024: Config loaded from /mosquitto/config/mosquitto.conf.
+1740337024: Opening ipv4 listen socket on port 1883.
+1740337024: Opening ipv6 listen socket on port 1883.
+1740337024: mosquitto version 2.0.20 running
+1740337035: mosquitto version 2.0.20 terminating
+1740337035: Saving in-memory database to /mosquitto/data//mosquitto.db.
