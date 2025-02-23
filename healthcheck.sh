@@ -3,6 +3,5 @@
 CNT=$(docker ps |grep serial | wc -l)
 if [ $CNT = 0 ]
 then
-    docker start serial
+    exec /usr/bin/docker start serial &
 fi
-
