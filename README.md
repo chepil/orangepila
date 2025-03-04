@@ -31,5 +31,7 @@ check that serial data duplicates to mqtt brokker
 
 mqtt topic is gpsloc
 
+you can try open nakarte project via browser with http://orangepi_ip_address
+
 that's all
 
