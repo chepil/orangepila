@@ -45,6 +45,21 @@ services:
       retries: 500
       start_period: 10s
 
+  nakarte:
+    build:
+      context: ./nakarte
+    container_name: nakarte
+    restart: always
+    networks:
+      network:
+        aliases:
+          - backend
+    ports:
+      - target: 8080
+        published: 80
+        protocol: tcp
+        mode: host
+
 volumes:
   data:
     name: "mqtt-broker-data"
