@@ -11,6 +11,7 @@ RUN yarn
 RUN cp src/secrets.js.template src/secrets.js
 
 EXPOSE 80
+EXPOSE 8080
 
 CMD ["yarn", "start"]
 
