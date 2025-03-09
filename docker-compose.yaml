@@ -36,14 +36,14 @@ services:
       network:
         aliases:
           - backend
-    devices:
-      - /dev/ttyACM0:/dev/ttyACM0
-    healthcheck:
-      test: [ "CMD-SHELL", "ls /dev/ttyACM0 |wc -l" ]
-      interval: 10s
-      timeout: 5s
-      retries: 500
-      start_period: 10s
+#    devices:
+#      - /dev/ttyACM0:/dev/ttyACM0
+#    healthcheck:
+#      test: [ "CMD-SHELL", "ls /dev/ttyACM0 |wc -l" ]
+#      interval: 10s
+#      timeout: 5s
+#      retries: 500
+#      start_period: 10s
 
   nakarte:
     build:
@@ -68,8 +68,15 @@ services:
     image: mysql:8
     container_name: mysql
     restart: always
+    networks:
+      network:
+        aliases:
+          - backend
     ports:
-      - "3306:3306"
+      - target: 3306
+        published: 3306
+        protocol: tcp
+        mode: host
     environment:
       MYSQL_ROOT_PASSWORD: secret
       MYSQL_DATABASE: pila
