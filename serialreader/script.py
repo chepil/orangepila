@@ -61,7 +61,7 @@ except Exception as e:
 try:
     cnx = getMysql()
     cur = cnx.cursor()
-    cur.execute("create table if not exists `" + MYSQL_DATABASE + "`.`locations` (`date` DATETIME,`id` VARCHAR(7),`type` INT,`lat` FLOAT,`lng` FLOAT);")
+    cur.execute("create table if not exists `" + MYSQL_DATABASE + "`.`locations` (`date` DATETIME,`id` VARCHAR(7),`type` INT,`lat` DOUBLE,`lng` DOUBLE);")
 #    message = "+GPSLOC:1,2500251,0,1,43.958046,56.282513,5"
 #    arr = message.split(",")
 #    stationId = arr[1]
