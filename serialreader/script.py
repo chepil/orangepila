@@ -156,16 +156,17 @@ while True:
                 # Execute a query
                 arr = message.split(",")
                 if (len(arr) > 6):
-                    stationId = arr[1]
-                    lat = arr[5]
-                    lng = arr[4]
-                    statioType = arr[6]
-                    now = datetime.now()
-                    formatted_date = now.strftime('%Y-%m-%d %H:%M:%S')
-                    #(`date` DATETIME,`id` VARCHAR(7),`type` INT,`lat` FLOAT,`lng` FLOAT)
-                    cur = cnx.cursor()
-                    cur.execute("insert into `locations` values ('" + formatted_date + "', " + stationId + ", " + statioType + ", " + lat + ", " + lng + ")")
-                    cnx.commit()
+                    if (arr[0] == '+GPSLOC:1'):
+                        stationId = arr[1]
+                        lat = arr[5]
+                        lng = arr[4]
+                        statioType = arr[6]
+                        now = datetime.now()
+                        formatted_date = now.strftime('%Y-%m-%d %H:%M:%S')
+                        #(`date` DATETIME,`id` VARCHAR(7),`type` INT,`lat` FLOAT,`lng` FLOAT)
+                        cur = cnx.cursor()
+                        cur.execute("insert into `locations` values ('" + formatted_date + "', " + stationId + ", " + statioType + ", " + lat + ", " + lng + ")")
+                        cnx.commit()
         else:
             is_exception = True
     except Exception as e:
