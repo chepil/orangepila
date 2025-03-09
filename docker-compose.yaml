@@ -36,14 +36,14 @@ services:
       network:
         aliases:
           - backend
-#    devices:
-#      - /dev/ttyACM0:/dev/ttyACM0
-#    healthcheck:
-#      test: [ "CMD-SHELL", "ls /dev/ttyACM0 |wc -l" ]
-#      interval: 10s
-#      timeout: 5s
-#      retries: 500
-#      start_period: 10s
+    devices:
+      - /dev/ttyACM0:/dev/ttyACM0
+    healthcheck:
+      test: [ "CMD-SHELL", "ls /dev/ttyACM0 |wc -l" ]
+      interval: 10s
+      timeout: 5s
+      retries: 500
+      start_period: 10s
 
   nakarte:
     build:
