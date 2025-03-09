@@ -165,6 +165,7 @@ while True:
                     #(`date` DATETIME,`id` VARCHAR(7),`type` INT,`lat` FLOAT,`lng` FLOAT)
                     cur = cnx.cursor()
                     cur.execute("insert into `locations` values ('" + formatted_date + "', " + stationId + ", " + statioType + ", " + lat + ", " + lng + ")")
+                    cnx.commit()
         else:
             is_exception = True
     except Exception as e:
