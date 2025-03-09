@@ -92,7 +92,7 @@ try:
                 publish(client, message)
                 client.loop_stop()
         except Exception as e:
-            print(e.message)
+            print(e)
             time.sleep(5)  # Задержка на 5 секунд
 
         if (is_exception == True):
@@ -102,7 +102,7 @@ try:
                                     timeout=1)
                 is_exception == False
             except Exception as e:
-                print(e.message)
+                print(e)
                 time.sleep(5)  # Задержка на 5 секунд
 
 finally:
