@@ -91,8 +91,8 @@ try:
                 client.loop_start()
                 publish(client, message)
                 client.loop_stop()
-        except:
-            is_exception = True
+        except Exception as e:
+            print(e.message)
             time.sleep(5)  # Задержка на 5 секунд
 
         if (is_exception == True):
@@ -101,7 +101,8 @@ try:
                                     baudrate=SPEED,
                                     timeout=1)
                 is_exception == False
-            except:
+            except Exception as e:
+                print(e.message)
                 time.sleep(5)  # Задержка на 5 секунд
 
 finally:
