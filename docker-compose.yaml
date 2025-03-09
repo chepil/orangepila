@@ -64,6 +64,20 @@ services:
         protocol: tcp
         mode: host
 
+  mysql:
+    image: mysql:8
+    container_name: mysql
+    restart: always
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: secret
+      MYSQL_DATABASE: pila
+      MYSQL_USER: pila
+      MYSQL_PASSWORD: pila
+    volumes:
+      - ./dbdata:/var/lib/mysql/
+
 volumes:
   data:
     name: "mqtt-broker-data"

@@ -12,9 +12,10 @@ mkdir /root/src
 
 cd /root/src
 
-git clone git@github.com:chepil/orangepila.git
+git clone https://github.com/chepil/orangepila.git
 
 #start containers
+
 cd orangepila
 
 docker compose up -d --build
