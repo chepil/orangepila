@@ -99,6 +99,7 @@ while True:
     except Exception as e:
         print(e)
         ser.close()
+        is_exception = True
         time.sleep(5)  # Задержка на 5 секунд
 
     if (is_exception == True):
@@ -110,4 +111,5 @@ while True:
         except Exception as e:
             print(e)
             ser.close()
+            is_exception = True
             time.sleep(5)  # Задержка на 5 секунд
