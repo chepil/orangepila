@@ -25,9 +25,14 @@ MAX_RECONNECT_DELAY = 60
 # You may need to further configure settings
 # See the pyserial documentation for more info
 # https://pythonhosted.org/pyserial/pyserial_api.html#classes
-ser = serial.Serial(port=PORT,
-                    baudrate=SPEED,
-                    timeout=1)
+
+try:
+    ser = serial.Serial(port=PORT,
+                        baudrate=SPEED,
+                        timeout=1)
+except Exception as e:
+    print(e)
+    pass
 
 def on_disconnect(client, userdata, rc):
     #print("Disconnected with result code: %s", rc)
@@ -77,33 +82,32 @@ def publish(client, msg):
     #else:
         print(f"Failed to send message to topic {topic}")
 
-try:
-    client = connect_mqtt()
-    while True:
-        # Read raw data from the stream
-        # Convert the binary string to a normal string
-        # Remove the trailing newline character
-        is_exception = False
+
+client = connect_mqtt()
+while True:
+    # Read raw data from the stream
+    # Convert the binary string to a normal string
+    # Remove the trailing newline character
+    is_exception = False
+    try:
+        message = ser.readline().decode().rstrip()
+        if len(message) > 0:
+            print(f'{message}')
+            client.loop_start()
+            publish(client, message)
+            client.loop_stop()
+    except Exception as e:
+        print(e)
+        ser.close()
+        time.sleep(5)  # Задержка на 5 секунд
+
+    if (is_exception == True):
         try:
-            message = ser.readline().decode().rstrip()
-            if len(message) > 0:
-                print(f'{message}')
-                client.loop_start()
-                publish(client, message)
-                client.loop_stop()
+            ser = serial.Serial(port=PORT,
+                                baudrate=SPEED,
+                                timeout=1)
+            is_exception == False
         except Exception as e:
             print(e)
+            ser.close()
             time.sleep(5)  # Задержка на 5 секунд
-
-        if (is_exception == True):
-            try:
-                ser = serial.Serial(port=PORT,
-                                    baudrate=SPEED,
-                                    timeout=1)
-                is_exception == False
-            except Exception as e:
-                print(e)
-                time.sleep(5)  # Задержка на 5 секунд
-
-finally:
-    ser.close()
