@@ -83,11 +83,26 @@ try:
         # Read raw data from the stream
         # Convert the binary string to a normal string
         # Remove the trailing newline character
-        message = ser.readline().decode().rstrip()
-        if len(message) > 0:
-            print(f'{message}')
-            client.loop_start()
-            publish(client, message)
-            client.loop_stop()
+        is_exception = False
+        try:
+            message = ser.readline().decode().rstrip()
+            if len(message) > 0:
+                print(f'{message}')
+                client.loop_start()
+                publish(client, message)
+                client.loop_stop()
+        except:
+            is_exception = True
+            time.sleep(5)  # Задержка на 5 секунд
+
+        if (is_exception == True):
+            try:
+                ser = serial.Serial(port=PORT,
+                                    baudrate=SPEED,
+                                    timeout=1)
+                is_exception == False
+            except:
+                time.sleep(5)  # Задержка на 5 секунд
+
 finally:
     ser.close()

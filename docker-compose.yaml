@@ -76,7 +76,7 @@ services:
       MYSQL_USER: pila
       MYSQL_PASSWORD: pila
     volumes:
-      - ./dbdata:/var/lib/mysql/
+      - ./mysql/data:/var/lib/mysql/
 
 volumes:
   data:

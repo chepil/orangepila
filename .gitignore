@@ -1,1 +1,2 @@
 mosquitto/log/mosquitto.log
+mysql/data/*
