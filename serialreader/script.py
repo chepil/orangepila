@@ -11,11 +11,11 @@ from datetime import datetime
 from mysql.connector import connect, Error
 
 # This is the default serial port
-PORT = '/dev/ttyACM0'
+SERIAL_PORT = '/dev/ttyACM0'
 SPEED = 115200
 
 broker = 'mosquitto'
-port = 1883
+mqtt_port = 1883
 topic = "gpsloc"
 client_id = f'serial-{random.randint(0, 1000)}'
 
@@ -51,7 +51,7 @@ def getMysql():
 ser: serial.Serial
 
 try:
-    ser = serial.Serial(port=PORT,
+    ser = serial.Serial(port=SERIAL_PORT,
                         baudrate=SPEED,
                         timeout=1)
 except Exception as e:
@@ -120,7 +120,7 @@ def connect_mqtt():
     # client.username_pw_set(username, password)
     client.on_connect = on_connect
     client.on_disconnect = on_disconnect
-    client.connect(broker, port)
+    client.connect(broker, mqtt_port)
     return client
 
 def publish(client, msg):
@@ -176,7 +176,7 @@ while True:
 
     if (is_exception == True):
         try:
-            ser = serial.Serial(port=PORT,
+            ser = serial.Serial(port=SERIAL_PORT,
                                 baudrate=SPEED,
                                 timeout=1)
             is_exception == False
