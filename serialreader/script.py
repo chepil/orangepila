@@ -155,7 +155,7 @@ while True:
                 #сохранить в базе данных
                 # Execute a query
                 arr = message.split(",")
-                if (arr.len() > 6):
+                if (len(arr) > 6):
                     stationId = arr[1]
                     lat = arr[5]
                     lng = arr[4]
