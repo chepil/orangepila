@@ -85,6 +85,21 @@ services:
     volumes:
       - ./mysql/data:/var/lib/mysql/
 
+  api:
+    build:
+      context: ./api
+    container_name: api
+    restart: always
+    networks:
+      network:
+        aliases:
+          - backend
+    ports:
+      - target: 8081
+        published: 8081
+        protocol: tcp
+        mode: host
+
 volumes:
   data:
     name: "mqtt-broker-data"
