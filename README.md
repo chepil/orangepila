@@ -22,10 +22,11 @@ cd orangepila
 
 docker compose build
 
-#update nakarte service
+# update build
 
-docker compose build --no-cache nakarte
+git pull 
 
+docker compose build --no-cache
 
 docker compose up -d --build
 
