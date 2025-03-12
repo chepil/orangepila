@@ -18,6 +18,15 @@ git clone https://github.com/chepil/orangepila.git
 
 cd orangepila
 
+# first time build
+
+docker compose build
+
+#update nakarte service
+
+docker compose build --no-cache nakarte
+
+
 docker compose up -d --build
 
 check that docker containers run

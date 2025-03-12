@@ -2,6 +2,7 @@ from flask import Flask, jsonify
 from flask_mysqldb import MySQL
 
 app = Flask(__name__)
+
 app.config['MYSQL_HOST'] = 'mysql'
 app.config['MYSQL_USER'] = 'pila'
 app.config['MYSQL_PASSWORD'] = 'pila'
@@ -13,7 +14,7 @@ def hello_world():
     return 'Hello, World!'
 
 @app.route('/locations', methods=['GET'])
-def get_data():
+def locations():
     cur = mysql.connection.cursor()
     cur.execute('''
         select UNIX_TIMESTAMP(l.date) as date, l.id, l.type, l.lat, l.lng
@@ -22,7 +23,9 @@ def get_data():
     ''')
     data = cur.fetchall()
     cur.close()
-    return jsonify(data)
+    response = jsonify(data)
+    response.headers.add('Access-Control-Allow-Origin', '*')
+    return response
 
 if __name__ == '__main__':
     app.run(debug=True)
