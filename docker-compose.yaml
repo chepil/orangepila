@@ -63,6 +63,10 @@ services:
         published: 8080
         protocol: tcp
         mode: host
+    volumes:
+      - type: volume
+        source: maps
+        target: /nakarte/public/maps/
 
   mysql:
     image: mysql:8
@@ -99,10 +103,16 @@ services:
         published: 8081
         protocol: tcp
         mode: host
+    volumes:
+      - type: volume
+        source: maps
+        target: /app/maps/
 
 volumes:
   data:
     name: "mqtt-broker-data"
+  maps:
+    name: "api-nakarte-maps"
 
 networks:
   network:
