@@ -15,6 +15,7 @@ RUN apk add python3-dev mysql-dev pkgconfig
 RUN pip3 install mysqlclient --break-system-packages
 RUN pip3 install flask --break-system-packages
 RUN pip3 install flask_mysqldb --break-system-packages
+RUN pip3 install pykml --break-system-packages
 
 RUN apk del build-deps
 EXPOSE 8081

@@ -1,4 +1,6 @@
 import os
+import pathlib
+from pykml import parser
 from flask import Flask, jsonify, flash, request, redirect, url_for
 from flask_mysqldb import MySQL
 from werkzeug.utils import secure_filename
@@ -25,6 +27,17 @@ app.add_url_rule(
 app.add_url_rule(
     "/success/<name>", endpoint="success_file_upload", build_only=True
 )
+
+def allowed_file(filename):
+    return '.' in filename and \
+           filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+
+def fast_scandir(dirname):
+    subfolders= [f.path for f in os.scandir(dirname) if f.is_dir()]
+    for dirname in list(subfolders):
+        subfolders.extend(fast_scandir(dirname))
+    return subfolders
+
 
 @app.route('/')
 def hello_world():
@@ -124,10 +137,51 @@ def remove_all():
     <a href='/upload'>Вернуться к загрузке карт</a>
     '''
 
+@app.route('/localmaps', methods=['GET'])
+def localmaps():
+    kmzfolder = os.path.join(app.config['UPLOAD_FOLDER'], 'kmz')
+    mapjsons = {}
+    if os.path.exists(kmzfolder):
+        subfolders = fast_scandir(kmzfolder)
+        mapjsons = getAllKmzLocalMaps(subfolders)
+    response = jsonify(mapjsons)
+    response.headers.add('Access-Control-Allow-Origin', '*')
+    return response
 
-def allowed_file(filename):
-    return '.' in filename and \
-           filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+def getAllKmzLocalMaps(dirname):
+    mapjsons = []
+    for folder in dirname:
+        path = pathlib.PurePath(folder)
+        mapname = path.name
+        mapjson = {
+            "name": mapname
+        }
+        #print(mapjson)
+        dockmlpath = folder + "/doc.kml"
+        #print(dockmlpath)
+
+        with open(dockmlpath, 'r', encoding="UTF-8") as f:
+            root = parser.parse(f).getroot()
+
+        images = []
+        for image in root.Document.GroundOverlay:
+            data = {}
+            data["file"] = image.Icon.href.text.strip()
+            north = image.LatLonBox.north.text.strip()
+            south = image.LatLonBox.south.text.strip()
+            east = image.LatLonBox.east.text.strip()
+            west = image.LatLonBox.west.text.strip()
+            data["north"] = north
+            data["south"] = south
+            data["east"] = east
+            data["west"] = west
+            images.append(data)
+        mapjson["data"] = images
+        mapjsons.append(mapjson)
+
+    return mapjsons
+
+
 
 if __name__ == '__main__':
     app.run(debug=True)
