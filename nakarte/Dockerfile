@@ -7,7 +7,7 @@ RUN apk add git
 RUN git clone https://github.com/chepil/nakarte.git /nakarte
 RUN cd /nakarte
 RUN git pull
-RUN yarn
+RUN yarn --network-timeout 100000
 RUN cp src/secrets.js.template src/secrets.js
 
 EXPOSE 80
