@@ -46,8 +46,8 @@ services:
       start_period: 10s
 
   nakarte:
-    build:
-      context: ./nakarte
+    #build:
+    #  context: ./nakarte
     image: ghcr.io/chepil/nakarte:v1.0
     container_name: nakarte
     restart: always
