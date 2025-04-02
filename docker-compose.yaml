@@ -36,8 +36,11 @@ services:
       network:
         aliases:
           - backend
-    devices:
-      - /dev/ttyACM0:/dev/ttyACM0
+    #devices:
+    #  - /dev/ttyACM0:/dev/ttyACM0
+    privileged: true
+      devices:
+        - /dev:/dev
     healthcheck:
       test: [ "CMD-SHELL", "ls /dev/ttyACM0 |wc -l" ]
       interval: 10s
