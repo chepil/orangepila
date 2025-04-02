@@ -9,7 +9,10 @@ RUN cd /nakarte
 RUN git pull
 RUN yarn config set strict-ssl true
 RUN yarn config set disable-self-update-check true
+RUN yarn config set registry http://registry.yarnpkg.com
+
 RUN yarn --non-interactive --network-timeout 100000
+
 RUN cp src/secrets.js.template src/secrets.js
 
 EXPOSE 80
