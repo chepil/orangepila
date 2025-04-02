@@ -49,6 +49,7 @@ services:
     #build:
     #  context: ./nakarte
     image: ghcr.io/chepil/nakarte:v1.0
+    platform: linux/x86_64
     container_name: nakarte
     restart: always
     networks:
