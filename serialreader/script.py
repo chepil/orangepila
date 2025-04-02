@@ -53,9 +53,11 @@ ser: serial.Serial
 try:
     ser = serial.Serial(port=SERIAL_PORT,
                         baudrate=SPEED,
-                        timeout=1)
+                        timeout=5)
 except Exception as e:
+    print('3')
     print(e)
+    ser.close()
     pass
 
 cnx = getMysql()
@@ -171,6 +173,7 @@ while True:
         else:
             is_exception = True
     except Exception as e:
+        print('2')
         print(e)
         if 'ser' in locals():
             ser.close()
@@ -181,9 +184,10 @@ while True:
         try:
             ser = serial.Serial(port=SERIAL_PORT,
                                 baudrate=SPEED,
-                                timeout=1)
+                                timeout=5)
             is_exception == False
         except Exception as e:
+            print('1')
             print(e)
             if 'ser' in locals():
                 ser.close()
