@@ -55,9 +55,10 @@ try:
                         baudrate=SPEED,
                         timeout=5)
 except Exception as e:
-    print('3')
     print(e)
-    ser.close()
+    if 'ser' in locals():
+        if ser != None:
+            ser.close()
     pass
 
 cnx = getMysql()
@@ -147,37 +148,43 @@ while True:
     # Remove the trailing newline character
     is_exception = False
     try:
-        if 'ser' in locals():
-            message = ser.readline().decode().rstrip()
-            if len(message) > 0:
-                print(f'{message}')
-                client.loop_start()
-                publish(client, message)
-                client.loop_stop()
+        if ser == None:
+            ser = serial.Serial(port=SERIAL_PORT,
+                                baudrate=SPEED,
+                                timeout=5)
+        #if 'ser' in locals():
+        message = ser.readline().decode().rstrip()
+        if len(message) > 0:
+            print(f'{message}')
+            client.loop_start()
+            publish(client, message)
+            client.loop_stop()
 
-                #сохранить в базе данных
-                # Execute a query
-                arr = message.split(",")
-                if (len(arr) > 6):
-                    if (arr[0] == '+GPSLOC:1'):
-                        stationId = arr[1]
-                        lat = arr[5]
-                        lng = arr[4]
-                        statioType = arr[6]
-                        now = datetime.now()
-                        formatted_date = now.strftime('%Y-%m-%d %H:%M:%S')
-                        #(`date` DATETIME,`id` VARCHAR(7),`type` INT,`lat` FLOAT,`lng` FLOAT)
-                        cur = cnx.cursor()
-                        cur.execute("insert into `locations` values ('" + formatted_date + "', " + stationId + ", " + statioType + ", " + lat + ", " + lng + ")")
-                        cnx.commit()
-        else:
-            is_exception = True
+            #сохранить в базе данных
+            # Execute a query
+            arr = message.split(",")
+            if (len(arr) > 6):
+                if (arr[0] == '+GPSLOC:1'):
+                    stationId = arr[1]
+                    lat = arr[5]
+                    lng = arr[4]
+                    statioType = arr[6]
+                    now = datetime.now()
+                    formatted_date = now.strftime('%Y-%m-%d %H:%M:%S')
+                    #(`date` DATETIME,`id` VARCHAR(7),`type` INT,`lat` FLOAT,`lng` FLOAT)
+                    cur = cnx.cursor()
+                    cur.execute("insert into `locations` values ('" + formatted_date + "', " + stationId + ", " + statioType + ", " + lat + ", " + lng + ")")
+                    cnx.commit()
+        #else:
+        #    is_exception = True
+        #    print("not ser in locals")
     except Exception as e:
-        print('2')
         print(e)
         if 'ser' in locals():
-            ser.close()
+            if ser != None:
+                ser.close()
         is_exception = True
+        ser = None
         time.sleep(5)  # Задержка на 5 секунд
 
     if (is_exception == True):
@@ -187,9 +194,9 @@ while True:
                                 timeout=5)
             is_exception == False
         except Exception as e:
-            print('1')
             print(e)
             if 'ser' in locals():
-                ser.close()
+                if ser != None:
+                    ser.close()
             is_exception = True
             time.sleep(5)  # Задержка на 5 секунд

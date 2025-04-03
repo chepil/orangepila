@@ -39,8 +39,9 @@ services:
     #devices:
     #  - /dev/ttyACM0:/dev/ttyACM0
     privileged: true
-    devices:
+    volumes:
       - /dev:/dev
+      - /run/udev:/run/udev
     healthcheck:
       test: [ "CMD-SHELL", "ls /dev/ttyACM0 |wc -l" ]
       interval: 10s
@@ -49,8 +50,8 @@ services:
       start_period: 10s
 
   nakarte:
-    #build:
-    #  context: ./nakarte
+    build:
+      context: ./nakarte
     image: ghcr.io/chepil/nakarte:v1.1
     platform: linux/aarch64
     container_name: nakarte
