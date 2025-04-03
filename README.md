@@ -44,5 +44,47 @@ mqtt topic is gpsloc
 
 you can try open nakarte project via browser with http://orangepi_ip_address
 
-that's all
+# =================
+
+How to Make WiFi Access Point mode
+
+# First - make config file for WiFi network orangepila with password lizaalert:
+
+create_ap -m nat wlan0 end0 orangepila lizaalert --no-virt  --mkconfig /etc/create_ap.conf
+
+# Second - make and start ssytem service:
+
+1) make new file
+
+vi /etc/systemd/system/create_ap.service
+
+past next code:
+
+[Unit]
+Description=Create AP Service
+After=network.target
+
+[Service]
+Type=simple
+ExecStart=/usr/bin/create_ap --config /etc/create_ap.conf
+KillSignal=SIGINT
+Restart=on-failure
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target
+
+#
+
+2) then enable and start system service
+
+systemctl enable create_ap
+
+systemctl start create_ap
+
+Now you can connect to the map over wifi network
+
+To access map: http://192.168.12.1
+
+To upload local maps: http://192.168.12.1:8081/upload
 
