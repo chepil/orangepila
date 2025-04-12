@@ -18,7 +18,7 @@ app.config['MYSQL_DB'] = 'pila'
 mysql = MySQL(app)
 
 UPLOAD_FOLDER = '/app/maps'
-ALLOWED_EXTENSIONS = {'kmz'}
+ALLOWED_EXTENSIONS = {'kmz', 'gpx'}
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 app.config['MAX_CONTENT_LENGTH'] = 128 * 1000 * 1000
 app.add_url_rule(
@@ -79,21 +79,23 @@ def upload_file():
             filepath = os.path.join(extdir, filename)
             file.save(filepath)
 
-            unzipfolder = filepath[:-4]
-
-            with zipfile.ZipFile(filepath, 'r') as zip_ref:
-                zip_ref.extractall(unzipfolder)
-
-            #remove original kmz file
             if extension == 'kmz':
+                unzipfolder = filepath[:-4]
+                with zipfile.ZipFile(filepath, 'r') as zip_ref:
+                    zip_ref.extractall(unzipfolder)
+                #remove original kmz file
                 if os.path.exists(filepath):
                     os.remove(filepath)
+
+            if extension == 'gpx':
+                #не нужно ничего делать, так как gpx это файл сеток и тп
+                pass
 
             return redirect(url_for('success_file_upload', name=filename))
     return '''
     <!doctype html>
-    <title>Загрузка карт в формате KMZ</title>
-    <h1>Загрузка карт в формате KMZ</h1>
+    <title>Загрузка карт в формате KMZ, GPX</title>
+    <h1>Загрузка карт в формате KMZ, GPX</h1>
     <h2>KMZ файл содержит внутри файлы: doc.kml и jpg фрагменты карт</h2>
     <form method=post enctype=multipart/form-data>
       <input type=file name=file>
