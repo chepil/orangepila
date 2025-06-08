@@ -1,2 +1,3 @@
 mosquitto/log/mosquitto.log
 mysql/data/*
+.idea

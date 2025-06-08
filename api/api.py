@@ -21,12 +21,9 @@ UPLOAD_FOLDER = '/app/maps'
 ALLOWED_EXTENSIONS = {'kmz', 'gpx'}
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 app.config['MAX_CONTENT_LENGTH'] = 128 * 1000 * 1000
-app.add_url_rule(
-    "/uploads/<name>", endpoint="download_file", build_only=True
-)
-app.add_url_rule(
-    "/success/<name>", endpoint="success_file_upload", build_only=True
-)
+app.add_url_rule("/uploads/<name>", endpoint="download_file", build_only=True)
+app.add_url_rule("/success/<name>", endpoint="success_file_upload", build_only=True)
+app.add_url_rule("/download/gpx/<name>", endpoint="download_gpx_file", build_only=True)
 
 def allowed_file(filename):
     return '.' in filename and \
@@ -112,6 +109,12 @@ def upload_file():
 def download_file(name):
     return send_from_directory(app.config["UPLOAD_FOLDER"], name)
 
+@app.route('/download/gpx/<name>')
+def download_gpx_file(name):
+    resp = send_from_directory(app.config["UPLOAD_FOLDER"] + "/gpx/", name)
+    resp.headers['Access-Control-Allow-Origin'] = '*'
+    return resp
+
 @app.route('/success/<name>')
 def success_file_upload(name):
     return '''
@@ -139,14 +142,24 @@ def remove_all():
     <a href='/upload'>Вернуться к загрузке карт</a>
     '''
 
-@app.route('/localmaps', methods=['GET'])
-def localmaps():
+@app.route('/localmaps/kmz', methods=['GET'])
+def localmapskmz():
     kmzfolder = os.path.join(app.config['UPLOAD_FOLDER'], 'kmz')
     mapjsons = {}
     if os.path.exists(kmzfolder):
         subfolders = fast_scandir(kmzfolder)
         mapjsons = getAllKmzLocalMaps(subfolders)
     response = jsonify(mapjsons)
+    response.headers.add('Access-Control-Allow-Origin', '*')
+    return response
+
+@app.route('/localtracks/gpx', methods=['GET'])
+def localtracksgpx():
+    gpxfolder = os.path.join(app.config['UPLOAD_FOLDER'], 'gpx')
+    tracksjsons = {}
+    if os.path.exists(gpxfolder):
+        tracksjsons = getAllGpxLocalTracks(gpxfolder)
+    response = jsonify(tracksjsons)
     response.headers.add('Access-Control-Allow-Origin', '*')
     return response
 
@@ -183,7 +196,17 @@ def getAllKmzLocalMaps(dirname):
 
     return mapjsons
 
-
+def getAllGpxLocalTracks(dirname):
+    tracksjsons = []
+    files = glob.glob(os.path.join(dirname, '*'))
+    for f in files:
+        if os.path.isfile(f):
+            trackname = os.path.basename(f)
+            trackjson = {
+                "name": trackname
+            }
+            tracksjsons.append(trackjson)
+    return tracksjsons
 
 if __name__ == '__main__':
     app.run(debug=True)
