@@ -52,7 +52,7 @@ services:
   nakarte:
     build:
       context: ./nakarte
-    image: ghcr.io/chepil/nakarte:v1.1
+    image: ghcr.io/chepil/nakarte:v1.2
     platform: linux/aarch64
     container_name: nakarte
     restart: always
